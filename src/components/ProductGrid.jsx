@@ -107,7 +107,7 @@ function ProductGrid({ filters = {} }) {
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <Link to={`/product/${product.id}`} key={product.id} className="h-full">
-              <div className="flex flex-col h-full gap-3 pb-3 group shadow-md rounded-lg overflow-hidden transition-transform duration-300 hover:shadow-lg bg-[#FFF2EB]">
+              <div className="flex flex-col h-full gap-3 pb-3 group shadow-md rounded-lg overflow-hidden transition-transform duration-300 hover:shadow-lg bg-[#F1EAFF]">
                 {/* Product image - fixed height */}
              <div className="w-full aspect-square overflow-hidden">
                   <img
@@ -127,7 +127,7 @@ function ProductGrid({ filters = {} }) {
                       PKR {product.price}
                     </p>
                   </div>
-                  <button className="mt-auto py-2 px-1 rounded-full bg-[#B6CEB4] text-white text-sm font-semibold shadow-md hover:bg-gray-900 transition-all duration-200">
+                  <button className="mt-auto py-2 px-1 rounded-full bg-[#cac3e2] text-white text-sm font-semibold shadow-md hover:bg-gray-900 transition-all duration-200">
                     Buy Now
                   </button>
                 </div>

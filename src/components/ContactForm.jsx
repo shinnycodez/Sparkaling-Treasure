@@ -62,7 +62,7 @@ const ContactForm = () => {
         />
         <button
           type="submit"
-          className="w-full bg-[#B6CEB4] hover:bg-pink-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300"
+          className="w-full bg-[#D0A2F7] hover:bg-pink-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300"
         >
           ✨ Send
         </button>

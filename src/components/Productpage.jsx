@@ -204,7 +204,7 @@ const ProductPage = ({ onOpenCart }) => {
   };
 
   if (!product) return (
-    <div className="min-h-screen bg-[#96A78D] flex items-center justify-center">
+    <div className="min-h-screen bg-[#cac3e2] flex items-center justify-center">
       <div className="text-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
         <p className="text-gray-600">Loading product...</p>
@@ -220,7 +220,7 @@ const ProductPage = ({ onOpenCart }) => {
   const savings = product.price - discountedPrice;
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-[#96A78D] overflow-x-hidden">
+    <div className="relative flex min-h-screen flex-col bg-[#cac3e2] overflow-x-hidden">
       {showSuccess && (
         <div className="fixed top-5 left-1/2 transform -translate-x-1/2 z-[100]">
           <div className="flex items-center gap-3 bg-green-100 border border-green-300 text-green-800 px-5 py-2 rounded-xl shadow-lg animate-fade-in-out transition-all">
@@ -239,7 +239,7 @@ const ProductPage = ({ onOpenCart }) => {
       )}
 
       <Header />
-      <div className="layout-container flex h-full grow flex-col bg-[#96A78D]">
+      <div className="layout-container flex h-full grow flex-col bg-[#cac3e2]">
         <div className="gap-1 px-6 flex flex-1 justify-center py-5 flex-col md:flex-row">
           <div className="flex flex-col max-w-[920px] flex-1">
             <div className="flex w-full grow p-4 relative">
@@ -401,7 +401,7 @@ const ProductPage = ({ onOpenCart }) => {
                 disabled={!product.available || loading}
                 className={`w-full py-3 px-4 rounded-xl font-medium text-base transition-colors ${
                   product.available && !loading
-                    ? 'bg-[#B6CEB4] text-white hover:bg-[#FCBACB]'
+                    ? 'bg-[#DCBFFF] text-white hover:bg-[#FCBACB]'
                     : 'bg-gray-400 text-white cursor-not-allowed'
                 }`}
               >

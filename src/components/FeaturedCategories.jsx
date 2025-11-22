@@ -5,15 +5,10 @@ const categories = [
     {
     id: 1,
     title: "Bracelets ⋆౨ৎ˚⟡",
-    imageUrl: "https://pbs.twimg.com/media/G1TNITFXIAAKjyZ?format=jpg&name=small",
+    imageUrl: "https://i.pinimg.com/1200x/85/d4/68/85d468199d0ba37b15c597e17439939e.jpg",
     link: "Bracelets"
   },
-  {
-    id: 2,
-    title: "Necklaces ✧˖°.",
-    imageUrl: "https://pbs.twimg.com/media/G1TNOG8WQAAwQO3?format=jpg&name=small",
-      link: "Necklaces",
-  },
+
 
 
   //   {
@@ -24,38 +19,46 @@ const categories = [
       {
     id: 3,
     title: "Earrings ⋆˚꩜｡",
-    imageUrl: "https://pbs.twimg.com/media/G1TNUbcXwAAcikk?format=jpg&name=small",
+    imageUrl: "https://i.pinimg.com/1200x/28/10/02/2810028923797ce6c0e3b7aee535a455.jpg",
       link: "Earrings"
   },
-      {
-    id: 4,
-    title: "Phone charms ｡°✩",
-    imageUrl:"https://pbs.twimg.com/media/G1TNROYWUAAX94f?format=jpg&name=small",
-     link: "Phone charms"
-  },
+
         {
     id: 5,
-    title: "Presson nails 𝜗ৎ",
-    imageUrl:"https://pbs.twimg.com/media/G1TOH2OWwAAoY6v?format=jpg&name=small",
-     link: "Presson nails"
+    title: "Nails 𝜗ৎ",
+    imageUrl:"https://i.pinimg.com/1200x/d6/26/2d/d6262d67aedfa6e15a0665fd67b43d9f.jpg",
+     link: "Nails"
   },
+
   {
       id: 6,
-    title: "Other ⋆˚࿔",
-    imageUrl:"https://pbs.twimg.com/media/G1TOJfCWwAEafV7?format=jpg&name=small",
-     link: "Other"
+    title: "Anklets⋆˚࿔",
+    imageUrl:"https://i.pinimg.com/1200x/90/72/7a/90727a07000d08b1036b83c9fe0e2cbb.jpg",
+     link: "Anklets"
   },
     {
       id: 7,
     title: "Cuffs ✮ ⋆ ˚｡",
-    imageUrl:"https://pbs.twimg.com/media/G1TOKwYWEAAnoBZ?format=jpg&name=small",
+    imageUrl:"https://i.pinimg.com/1200x/04/33/84/043384af6363e7937e5b792a698eec72.jpg",
      link: "Cuffs"
   },
       {
       id: 7,
     title: "Rings  🌷⋆｡‧˚ ",
-    imageUrl:"https://pbs.twimg.com/media/G1TOPhWX0AAhISG?format=jpg&name=small",
+    imageUrl:"https://i.pinimg.com/1200x/6b/93/01/6b9301733ccc998dedb91ae7d8e9a64d.jpg",
      link: "Rings"
+  },
+        {
+    id: 4,
+    title: "Jhumkay ｡°✩",
+    imageUrl:"https://i.pinimg.com/1200x/10/82/f8/1082f80ad21674a537f8175ae7778c18.jpg",
+     link: "Jhumkay"
+  },
+      {
+    id: 2,
+    title: "Necklaces ✧˖°.",
+    imageUrl: "https://i.pinimg.com/1200x/1f/7f/6f/1f7f6f2cfa4055919e10c0c05f3a8708.jpg",
+      link: "Necklaces",
   },
   //     {
   //     id: 7,

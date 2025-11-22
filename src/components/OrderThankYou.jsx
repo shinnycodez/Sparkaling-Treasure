@@ -10,10 +10,10 @@ const OrderThankYou = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-[#96A78D] p-6 text-center">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-[#D0A2F7] p-6 text-center">
       <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border-4 border-dashed border-pink-200">
         <div className="text-pink-500 text-5xl mb-4">
-          <FaHeart className="mx-auto animate-bounce text-[#96A78D]" />
+          <FaHeart className="mx-auto animate-bounce text-[#D0A2F7]" />
         </div>
         <h1 className="text-2xl font-bold text-gray-800 mb-2">Thankyou For Ordering </h1>
         <p className="text-gray-600 mb-6">
@@ -21,7 +21,7 @@ const OrderThankYou = () => {
         </p>
         <button
           onClick={handleContinueShopping}
-          className="bg-[#B6CEB4] hover:bg-[#B6CEB4] text-white font-semibold px-6 py-3 rounded-full transition duration-300 shadow-md"
+          className="bg-[#D0A2F7] hover:bg-[#D0A2F7] text-white font-semibold px-6 py-3 rounded-full transition duration-300 shadow-md"
         >
           Continue Shopping
         </button>

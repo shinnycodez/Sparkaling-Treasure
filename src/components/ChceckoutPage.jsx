@@ -26,7 +26,7 @@ const CheckoutPage = () => {
     region: '',
     country: '',
     shippingMethod: 'Standard Delivery',
-    paymentMethod: 'EasyPaisa',
+    paymentMethod: 'Advance Payment',
     promoCode: '',
     notes: '',
   });
@@ -34,6 +34,41 @@ const CheckoutPage = () => {
   const [errors, setErrors] = useState({});
   const [bankTransferProofBase64, setBankTransferProofBase64] = useState(null);
   const [convertingImage, setConvertingImage] = useState(false);
+
+  // Shipping charges configuration
+  const shippingCharges = {
+    // Lahore = 180
+    lahore: 180,
+    
+    // Major cities = 230
+    karachi: 230,
+    islamabad: 230,
+    rawalpindi: 230,
+    multan: 230,
+    faisalabad: 230,
+    gujranwala: 230,
+    peshawar: 230,
+    quetta: 230,
+    sialkot: 230,
+    
+    // Small cities = 250
+    wazirabad: 250,
+    gujrat: 250,
+    jhelum: 250,
+    sargodha: 250,
+    bahawalpur: 250,
+    sahiwal: 250,
+    okara: 250,
+    sheikhupura: 250,
+    
+    // Rare cities/Kashmir = 280
+    muzaffarabad: 280,
+    mirpur: 280,
+    gilgit: 280,
+    skardu: 280,
+    chitral: 280,
+    swat: 280,
+  };
 
   // Load cart items from localStorage or session storage
   useEffect(() => {
@@ -69,8 +104,53 @@ const CheckoutPage = () => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
+  // Calculate shipping cost based on city
+  const calculateShippingCost = () => {
+    if (!form.city) return 300; // Default shipping cost
+    
+    const cityKey = form.city.toLowerCase().trim();
+    
+    // Direct match
+    if (shippingCharges[cityKey]) {
+      return shippingCharges[cityKey];
+    }
+    
+    // Check for partial matches for major cities
+    if (cityKey.includes('lahore')) return shippingCharges.lahore;
+    if (cityKey.includes('karachi')) return shippingCharges.karachi;
+    if (cityKey.includes('islamabad')) return shippingCharges.islamabad;
+    if (cityKey.includes('rawalpindi')) return shippingCharges.rawalpindi;
+    if (cityKey.includes('multan')) return shippingCharges.multan;
+    if (cityKey.includes('faisalabad')) return shippingCharges.faisalabad;
+    if (cityKey.includes('gujranwala')) return shippingCharges.gujranwala;
+    if (cityKey.includes('peshawar')) return shippingCharges.peshawar;
+    if (cityKey.includes('quetta')) return shippingCharges.quetta;
+    if (cityKey.includes('sialkot')) return shippingCharges.sialkot;
+    
+    // Check for partial matches for small cities
+    if (cityKey.includes('wazirabad')) return shippingCharges.wazirabad;
+    if (cityKey.includes('gujrat')) return shippingCharges.gujrat;
+    if (cityKey.includes('jhelum')) return shippingCharges.jhelum;
+    if (cityKey.includes('sargodha')) return shippingCharges.sargodha;
+    if (cityKey.includes('bahawalpur')) return shippingCharges.bahawalpur;
+    if (cityKey.includes('sahiwal')) return shippingCharges.sahiwal;
+    if (cityKey.includes('okara')) return shippingCharges.okara;
+    if (cityKey.includes('sheikhupura')) return shippingCharges.sheikhupura;
+    
+    // Check for partial matches for rare cities/Kashmir
+    if (cityKey.includes('muzaffarabad') || cityKey.includes('kashmir')) return shippingCharges.muzaffarabad;
+    if (cityKey.includes('mirpur')) return shippingCharges.mirpur;
+    if (cityKey.includes('gilgit')) return shippingCharges.gilgit;
+    if (cityKey.includes('skardu')) return shippingCharges.skardu;
+    if (cityKey.includes('chitral')) return shippingCharges.chitral;
+    if (cityKey.includes('swat')) return shippingCharges.swat;
+    
+    // Default to highest charge for unknown cities
+    return 280;
+  };
+
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-const shippingCost = 300
+  const shippingCost = calculateShippingCost();
   const total = subtotal + shippingCost;
 
   const handleChange = (e) => {
@@ -82,8 +162,8 @@ const shippingCost = 300
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
-    // Clear the Base64 string if payment method changes from EasyPaisa
-    if (name === 'paymentMethod' && value !== 'EasyPaisa') {
+    // Clear the Base64 string if payment method changes from Advance Payment
+    if (name === 'paymentMethod' && value !== 'Advance Payment') {
       setBankTransferProofBase64(null);
     }
   };
@@ -125,7 +205,8 @@ const shippingCost = 300
       newErrors.email = 'Please enter a valid email address';
     }
 
-    if (form.paymentMethod === 'EasyPaisa' && !bankTransferProofBase64) {
+    // Only require bank transfer proof for Advance Payment
+    if (form.paymentMethod === 'Advance Payment' && !bankTransferProofBase64) {
       newErrors.bankTransferProof = 'Please upload a screenshot of your JazzCash transfer or bank transfer receipt.';
     }
 
@@ -181,8 +262,8 @@ const shippingCost = 300
       shippingCost,
       total,
       createdAt: new Date(),
-      status: 'processing',
-      bankTransferProofBase64: form.paymentMethod === 'EasyPaisa' ? bankTransferProofBase64 : null,
+      status: form.paymentMethod === 'Cash on Delivery' ? 'pending' : 'processing',
+      bankTransferProofBase64: form.paymentMethod === 'Advance Payment' ? bankTransferProofBase64 : null,
     };
 
     try {
@@ -208,12 +289,22 @@ const shippingCost = 300
     }
   };
 
+  // Get shipping tier description
+  const getShippingTierDescription = () => {
+    const cost = calculateShippingCost();
+    if (cost === 180) return 'Lahore (PKR 180)';
+    if (cost === 230) return 'Major City (PKR 230)';
+    if (cost === 250) return 'Small City (PKR 250)';
+    if (cost === 280) return 'Remote Area (PKR 280)';
+    return 'Standard Delivery';
+  };
+
   // Show empty cart message if no items
   if (cartItems.length === 0) {
     return (
       <>
         <Header />
-        <div className="min-h-screen bg-[#96A78D] py-8 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-[#cac3e2] py-8 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="text-center py-16">
               <h1 className="text-3xl font-bold text-gray-900 mb-4">Your Cart is Empty</h1>
@@ -234,7 +325,7 @@ const shippingCost = 300
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-[#96A78D] py-8 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-[#cac3e2] py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Breadcrumbs */}
           <nav className="flex mb-8" aria-label="Breadcrumb">
@@ -314,9 +405,15 @@ const shippingCost = 300
                       name="city"
                       value={form.city}
                       onChange={handleChange}
+                      placeholder="Enter your city"
                       className={`w-full px-4 py-2 border ${errors.city ? 'border-red-500' : 'border-gray-300'} rounded-md focus:ring-black focus:border-black`}
                     />
                     {errors.city && <p className="mt-1 text-sm text-red-600">{errors.city}</p>}
+                    {form.city && (
+                      <p className="mt-1 text-xs text-gray-500">
+                        Shipping to {form.city}: PKR {shippingCost}
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -373,7 +470,9 @@ const shippingCost = 300
                   />
                   <div className="ml-3">
                     <p className="font-medium text-gray-900">Standard Delivery</p>
-
+                    <p className="text-sm text-gray-500 mt-1">
+                      {form.city ? getShippingTierDescription() : 'Enter city to see shipping cost'}
+                    </p>
                   </div>
                 </label>
               </div>
@@ -381,7 +480,7 @@ const shippingCost = 300
               <h2 className="text-lg sm:text-xl font-semibold mt-8 mb-6 pb-2 border-b">Payment Method</h2>
 
               <div className="space-y-4">
-                {['EasyPaisa'].map(method => (
+                {['Advance Payment', 'Cash on Delivery'].map(method => (
                   <label key={method} className="flex items-center p-4 border rounded-md hover:border-black cursor-pointer">
                     <input
                       type="radio"
@@ -391,20 +490,32 @@ const shippingCost = 300
                       onChange={handleChange}
                       className="h-4 w-4 text-black focus:ring-black border-gray-300"
                     />
-                    <span className="ml-3 font-medium text-gray-900">{method}</span>
+                    <div className="ml-3">
+                      <span className="font-medium text-gray-900">{method}</span>
+                      {method === 'Cash on Delivery' && (
+                        <p className="text-sm text-gray-500 mt-1">
+                          Pay when you receive your order
+                        </p>
+                      )}
+                    </div>
                   </label>
                 ))}
               </div>
 
-              {form.paymentMethod === 'EasyPaisa' && (
+              {form.paymentMethod === 'Advance Payment' && (
                 <div className="mt-6 p-4 border border-blue-300 bg-blue-50 rounded-md">
-                  <h3 className="text-base sm:text-lg font-semibold mb-3">EasyPaisa Details</h3>
+                  <h3 className="text-base sm:text-lg font-semibold mb-3">Advance Payment Details</h3>
                   <p className="text-gray-700 text-sm sm:text-base mb-4">
                     Please transfer the total amount of PKR {total.toLocaleString()} to our account:
                   </p>
                   <ul className="list-disc list-inside text-gray-800 text-sm sm:text-base mb-4">
-                     <li><strong>Account Name:</strong> Aasma Ghaffar </li>
-                    <li><strong>EasyPaisa Number:</strong> 03215122007 </li>
+                    <li><strong>Bank Name:</strong> HBL</li>
+                    <li><strong>Account Name:</strong> HAMNA FURQAN</li>
+                    <li><strong>Account Number:</strong> 06187902558899</li>
+                    <li><strong>IBAN:</strong> PK20HABB0006187902558899</li>
+                    <li><strong>JazzCash/Easypaisa:</strong></li>
+                    <li><strong>Account Name:</strong> HIMNA FURQAN</li>
+                    <li><strong>Account Number:</strong> 03280844224</li>
                   </ul>
                   <p className="text-gray-700 text-sm sm:text-base mb-4">
                     After making the transfer, please upload a screenshot of the transaction or bank transfer receipt as proof of payment.
@@ -433,6 +544,18 @@ const shippingCost = 300
                       </p>
                     )}
                   </div>
+                </div>
+              )}
+
+              {form.paymentMethod === 'Cash on Delivery' && (
+                <div className="mt-6 p-4 border border-green-300 bg-green-50 rounded-md">
+                  <h3 className="text-base sm:text-lg font-semibold mb-3">Cash on Delivery</h3>
+                  <p className="text-gray-700 text-sm sm:text-base mb-2">
+                    You will pay <strong>PKR {total.toLocaleString()}</strong> when you receive your order.
+                  </p>
+                  <p className="text-gray-600 text-sm">
+                    Our delivery person will collect the payment at your doorstep. Please keep the exact amount ready.
+                  </p>
                 </div>
               )}
 
@@ -519,7 +642,9 @@ const shippingCost = 300
 
                 <div className="flex justify-between">
                   <span className="text-sm text-gray-600">Shipping</span>
-                  <span className="text-sm">PKR {shippingCost.toLocaleString()}</span>
+                  <span className="text-sm">
+                    {form.city ? `PKR ${shippingCost.toLocaleString()} (${getShippingTierDescription().split('(')[0].trim()})` : 'Enter city'}
+                  </span>
                 </div>
 
                 {form.promoCode && (
@@ -534,6 +659,14 @@ const shippingCost = 300
                 <span className="font-medium text-base sm:text-lg">Total</span>
                 <span className="font-bold text-base sm:text-lg">PKR {total.toLocaleString()}</span>
               </div>
+
+              {form.paymentMethod === 'Cash on Delivery' && (
+                <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                  <p className="text-sm text-yellow-800 text-center">
+                    <strong>Payable on Delivery:</strong> PKR {total.toLocaleString()}
+                  </p>
+                </div>
+              )}
 
               <button
                 onClick={placeOrder}
@@ -551,13 +684,12 @@ const shippingCost = 300
                 ) : cartItems.length === 0 ? (
                   'Your Cart is Empty'
                 ) : (
-                  'Place Order'
+                  `Place Order${form.paymentMethod === 'Cash on Delivery' ? ' (COD)' : ''}`
                 )}
               </button>
 
               <div className="mt-6 text-center text-xs sm:text-sm text-gray-500">
                 <p>100% secure checkout</p>
-
               </div>
             </div>
           </div>
